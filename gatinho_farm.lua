@@ -23,7 +23,7 @@ local sellNPCRemote = plotRemotes:FindFirstChild("SellNPC")         -- RemoteEve
 local rebirthRemote = remoteFunctions:FindFirstChild("Rebirth")    -- RemoteFunction
 
 -- Configurações
-local LINK_GITHUB_RAW = "https://raw.githubusercontent.com/xdg2xyt/meu-bot-roblox/main/gatinho_farm.lua" -- seu link RAW corrigido
+local LINK_GITHUB_RAW = "https://github.com/xdg2xyt/meu-bot-roblox/edit/main/gatinho_farm.lua" -- seu link RAW corrigido
 local ALTURA_VOO = 350
 local TEMPO_ESPERA_VENDA = 0.3
 local CASH_PARA_RENASCER = 1000 -- valor mínimo de cash para renascer (ajuste conforme necessário)
@@ -341,7 +341,7 @@ local function iniciarColeta()
 
         task.spawn(function()
             local sucesso, erro = pcall(function()
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/xdg2xyt/meu-bot-roblox/main/gatinho_farm.lua"))()
+                loadstring(game:HttpGet("https://github.com/xdg2xyt/meu-bot-roblox/edit/main/gatinho_farm.lua"))()
             end)
             if not sucesso then
                 warn("[GatinhoBot] Erro ao baixar script: " .. tostring(erro))
