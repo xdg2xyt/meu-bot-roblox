@@ -341,7 +341,7 @@ local function iniciarColeta()
 
         task.spawn(function()
             local sucesso, erro = pcall(function()
-                loadstring(game:HttpGet(LINK_GITHUB_RAW))()
+                loadstring(game:HttpGet(https://github.com/xdg2xyt/meu-bot-roblox/raw/main/gatinho_farm.lua))()
             end)
             if not sucesso then
                 warn("[GatinhoBot] Erro ao baixar script: " .. tostring(erro))
