@@ -12,6 +12,9 @@ local function delementosAntigos()
 end
 delementosAntigos()
 
+-- Link oficial do seu repositório em texto puro (RAW)
+local LINK_GITHUB_RAW = "https://githubusercontent.com"
+
 -- 2. Configurações Globais Dinâmicas
 local backpack = player:WaitForChild("Backpack")
 local character, humanoid, humanoidRootPart
@@ -149,7 +152,6 @@ local function interagirSuperRapido(prompt)
     end
 end
 
--- Declaração antecipada da função principal para permitir loops internos seguros
 local iniciarColeta 
 
 -- 5. Função Principal Core
@@ -157,32 +159,45 @@ iniciarColeta = function()
     if executando then return end
     atualizarReferenciasPersonagem()
     
-    -- NOVO SISTEMA DE AUTO-RESTART INTERNO (Sem deletar a GUI)
+    -- CORREÇÃO DA MORTE: Corrigido o nome da variável do link RAW
     if conexaoMorte then conexaoMorte:Disconnect() end
     conexaoMorte = humanoid.Died:Connect(function()
         executando = false
-        StatusLabel.Text = "Status: Aguardando Respawn..."
-        print("[GatinhoBot] Morte detectada. Limpando cache de variáveis...")
+        StatusLabel.Text = "Status: Reiniciando via GitHub..."
+        print("[GatinhoBot] Morte registrada. Puxando arquivo limpo do GitHub...")
         
         if conexaoMorte then conexaoMorte:Disconnect() end
         
-        -- Espera você nascer vivo na base novamente
         player.CharacterAdded:Wait()
-        task.wait(1.5)
+        task.wait(2) 
         
-        -- Garante que o Roblox voltou a renderizar a pasta dos NPCs
         StatusLabel.Text = "Status: Carregando itens..."
         while #npcFolder:GetChildren() == 0 do
             task.wait(0.5)
         end
         
-        -- Avisa na GUI que reiniciou e liga o farm sozinho imediatamente!
-        StatusLabel.Text = "Status: Auto-Reiniciado! 🐾"
-        print("[GatinhoBot] Mapa carregado! Forçando reinício automático do farm...")
-        task.wait(0.5)
+        delementosAntigos()
+        task.wait(0.2)
         
-        task.spawn(iniciarColeta) -- Reinicia de forma limpa e segura
+        task.spawn(function()
+            local sucesso, erro = pcall(function()
+                -- Linha corrigida com a variável correta LINK_GITHUB_RAW
+                loadstring(game:HttpGet(https://github.com/xdg2xyt/meu-bot-roblox/raw/main/gatinho_farm.lua))()
+            end)
+            if not sucesso then
+                warn("[GatinhoBot] Erro ao baixar script: " .. tostring(erro))
+            end
+        end)
     end)
+    
+    local listaModelos = npcFolder:GetChildren()
+    if #listaModelos == 0 then
+        StatusLabel.Text = "Aguardando itens do mapa..."
+        while #npcFolder:GetChildren() == 0 do
+            task.wait(0.5)
+        end
+        listaModelos = npcFolder:GetChildren()
+    end
     
     executando = true
     StatusLabel.Text = "Status: Calculando órbita..."
@@ -190,8 +205,6 @@ iniciarColeta = function()
     
     local limiteItens = player:GetAttribute("MaxCarry") or 1
     local itensColetados = 0
-    
-    local listaModelos = npcFolder:GetChildren()
     local itensValidos = {}
     
     for _, itemModel in ipairs(listaModelos) do
@@ -251,7 +264,7 @@ end)
 StopButton.Activated:Connect(function()
     executando = false 
     if conexaoMorte then conexaoMorte:Disconnect() end
-    StatusLabel.Text = "Status: Emergência!"
+    StatusLabel.Text = "Status: Encerrou!"
     task.wait(0.05)
     if humanoidRootPart and humanoid and humanoid.Health > 0 and posicaoInicial then
         teletransportePeloCeu(posicaoInicial)
@@ -265,4 +278,3 @@ UnloadButton.Activated:Connect(function()
     task.wait(0.05)
     delementosAntigos()
 end)
-
